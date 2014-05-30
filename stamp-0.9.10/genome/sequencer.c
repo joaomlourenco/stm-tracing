@@ -78,17 +78,17 @@
  */
 
 
-#include "tm.h"
 
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include "thread.h"
+#include "tm.h"
 #include "hash.h"
 #include "hashtable.h"
 #include "segments.h"
 #include "sequencer.h"
 #include "table.h"
-#include "thread.h"
 #include "utility.h"
 #include "vector.h"
 #include "types.h"

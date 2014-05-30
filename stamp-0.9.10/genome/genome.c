@@ -74,11 +74,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "thread.h"
 #include "gene.h"
 #include "random.h"
 #include "segments.h"
 #include "sequencer.h"
-#include "thread.h"
 #include "timer.h"
 #include "tm.h"
 #include "vector.h"

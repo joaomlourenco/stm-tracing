@@ -29,6 +29,7 @@
 
 
 #  define malloc(size)                  tmalloc_reserve(size)
+// #  define calloc(n, size)               calloc(n, size)
 #  define calloc(n, size)               ({ \
                                             size_t numByte = (n) * (size); \
                                             void* ptr = tmalloc_reserve(numByte); \

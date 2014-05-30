@@ -71,10 +71,10 @@
 
 #include <assert.h>
 #include <getopt.h>
+#include "thread.h"
 #include "data.h"
 #include "learner.h"
 #include "net.h"
-#include "thread.h"
 #include "timer.h"
 #include "tm.h"
 #include "types.h"
