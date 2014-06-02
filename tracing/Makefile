@@ -1,4 +1,4 @@
-CFLAGS=-g
+CFLAGS=-g $(TRACE_CFLAGS)
 LIB=libtracing.a
 OBJS=tmtracing.o
 

@@ -143,7 +143,7 @@ typedef enum {
 #  define TRACE_STM_WRITELOCAL_END_CODE		19
 #  define TRACE_STM_SUCCESS_CODE		20
 
-#ifdef 0
+#ifdef NOTDEFINED
 #define TRACE_EVENT(c,a,b)	do { \
 					unsigned long data[3]; \
 					data[0] = c;	/* Code */ \
@@ -2304,9 +2304,12 @@ TxStart (Thread* Self, sigjmp_buf* envPtr, int* ROFlag)
 {
     PROF_STM_START_BEGIN();
     TRACE_STM_START_BEGIN();
+printf ("IN %s : %s\n", __FILE__, __FUNCTION__);
+    
 
     ASSERT(Self->Mode == TIDLE || Self->Mode == TABORTED);
     txReset(Self);
+printf ("RESET %s : %s\n", __FILE__, __FUNCTION__);
 
     Self->rv = GVRead(Self);
     ASSERT((Self->rv & LOCKBIT) == 0);
@@ -2323,6 +2326,7 @@ TxStart (Thread* Self, sigjmp_buf* envPtr, int* ROFlag)
     Self->Starts++;
 
 
+printf ("OUT %s : %s\n", __FILE__, __FUNCTION__);
 
     PROF_STM_START_END();
     TRACE_STM_START_END();

@@ -12,7 +12,7 @@ CFLAGS   += -I$(LIB)
 CPP      := g++
 CPPFLAGS += $(CFLAGS)
 LD       := g++
-LIBS     += -lpthread 
+LIBS     += -lpthread $(TRACE_LDFLAGS) $(TRACE_LIB)
 
 # Remove these files when doing clean
 OUTPUT +=
