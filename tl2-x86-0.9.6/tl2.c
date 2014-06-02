@@ -37,6 +37,10 @@
 #include "tmalloc.h"
 #include "util.h"
 
+#ifdef TL2_TRACE
+#include "tmtracing.h"
+#endif /* TL2_TRACE */
+
 #if defined(TL2_RESIZE_HASHLOG) && !defined(TL2_OPTIM_HASHLOG)
 #  error TL2_OPTIM_HASHLOG must be defined for TL2_RESIZE_HASHLOG
 #endif
@@ -117,6 +121,84 @@ typedef enum {
 #  define PROF_STM_SUCCESS()            /* nothing */
 
 
+#ifdef TL2_TRACE
+#  define TRACE_STM_ABORT_BEGIN_CODE		1
+#  define TRACE_STM_ABORT_END_CODE		2
+#  define TRACE_STM_COMMIT_BEGIN_CODE		3
+#  define TRACE_STM_COMMIT_END_OK_CODE		4
+#  define TRACE_STM_COMMIT_END_FAIL_CODE	5
+#  define TRACE_STM_NEWTHREAD_BEGIN_CODE	6
+#  define TRACE_STM_NEWTHREAD_END_CODE		7
+#  define TRACE_STM_READ_BEGIN_CODE		8
+#  define TRACE_STM_READ_END_CODE		9
+#  define TRACE_STM_READLOCAL_BEGIN_CODE	10
+#  define TRACE_STM_READLOCAL_END_CODE		11
+#  define TRACE_STM_START_BEGIN_CODE		12
+#  define TRACE_STM_START_END_CODE		13
+#  define TRACE_STM_STERILIZE_BEGIN_CODE	14
+#  define TRACE_STM_STERILIZE_END_CODE		15
+#  define TRACE_STM_WRITE_BEGIN_CODE		16
+#  define TRACE_STM_WRITE_END_CODE		17
+#  define TRACE_STM_WRITELOCAL_BEGIN_CODE	18
+#  define TRACE_STM_WRITELOCAL_END_CODE		19
+#  define TRACE_STM_SUCCESS_CODE		20
+
+#ifdef 0
+#define TRACE_EVENT(c,a,b)	do { \
+					unsigned long data[3]; \
+					data[0] = c;	/* Code */ \
+					data[1] = a;	/* addr or zero */ \
+					data[2] = b;	/* value or zero */ \
+					trace_event (Self->event_buffer, data, sizeof(data)); \
+				 } while (0)
+else
+#define TRACE_EVENT(c,a,b)	/* nothing */
+#endif
+
+#  define TRACE_STM_ABORT_BEGIN()        	/* TRACE_EVENT (TRACE_STM_ABORT_BEGIN_CODE, 0, 0) */
+#  define TRACE_STM_ABORT_END()          	/* TRACE_EVENT (TRACE_STM_ABORT_END_CODE, 0, 0) */
+#  define TRACE_STM_COMMIT_BEGIN()       	/* TRACE_EVENT (TRACE_STM_COMMIT_BEGIN_CODE, 0, 0) */
+#  define TRACE_STM_COMMIT_END_OK()      	/* TRACE_EVENT (TRACE_STM_COMMIT_END_OK_CODE, 0, 0) */
+#  define TRACE_STM_COMMIT_END_FAIL()    	/* TRACE_EVENT (TRACE_STM_COMMIT_END_FAIL_CODE, 0, 0) */
+#  define TRACE_STM_NEWTHREAD_BEGIN()		/* nothing */
+#  define TRACE_STM_NEWTHREAD_END()		/* nothing */
+#  define TRACE_STM_READ_BEGIN(addr)         	/* TRACE_EVENT (TRACE_STM_READ_BEGIN_CODE, (unsigned long)addr, 0) */
+#  define TRACE_STM_READ_END(addr)           	/* TRACE_EVENT (TRACE_STM_READ_END_CODE, (unsigned long)addr, 0) */
+#  define TRACE_STM_READLOCAL_BEGIN()    	/* TRACE_EVENT (TRACE_STM_READLOCAL_BEGIN_CODE, 0, 0) */
+#  define TRACE_STM_READLOCAL_END()      	/* TRACE_EVENT (TRACE_STM_READLOCAL_END_CODE, 0, 0) */
+#  define TRACE_STM_START_BEGIN()        	/* TRACE_EVENT (TRACE_STM_START_BEGIN_CODE, 0, 0) */
+#  define TRACE_STM_START_END()          	/* TRACE_EVENT (TRACE_STM_START_END_CODE, 0, 0) */
+#  define TRACE_STM_STERILIZE_BEGIN()    	/* nothing */
+#  define TRACE_STM_STERILIZE_END()      	/* nothing */
+#  define TRACE_STM_WRITE_BEGIN(addr, val)     	/* TRACE_EVENT (TRACE_STM_WRITE_BEGIN_CODE, (unsigned long)addr, (unsigned long)val) */
+#  define TRACE_STM_WRITE_END(addr, val)       	/* TRACE_EVENT (TRACE_STM_WRITE_END_CODE, (unsigned long)addr, (unsigned long)val) */
+#  define TRACE_STM_WRITELOCAL_BEGIN()   	/* TRACE_EVENT (TRACE_STM_WRITELOCAL_BEGIN_CODE, 0, 0) */
+#  define TRACE_STM_WRITELOCAL_END()     	/* TRACE_EVENT (TRACE_STM_WRITELOCAL_END_CODE, 0, 0) */
+#  define TRACE_STM_SUCCESS()            	/* TRACE_EVENT (TRACE_STM_SUCCESS_CODE, 0, 0) */
+#else /* !TL2_TRACE */
+#  define TRACE_STM_ABORT_BEGIN()        /* nothing */
+#  define TRACE_STM_ABORT_END()          /* nothing */
+#  define TRACE_STM_COMMIT_BEGIN()       /* nothing */
+#  define TRACE_STM_COMMIT_END_OK()      /* nothing */
+#  define TRACE_STM_COMMIT_END_FAIL()    /* nothing */
+#  define TRACE_STM_NEWTHREAD_BEGIN()    /* nothing */
+#  define TRACE_STM_NEWTHREAD_END()      /* nothing */
+#  define TRACE_STM_READ_BEGIN(addr)         /* nothing */
+#  define TRACE_STM_READ_END(addr)           /* nothing */
+#  define TRACE_STM_READLOCAL_BEGIN()    /* nothing */
+#  define TRACE_STM_READLOCAL_END()      /* nothing */
+#  define TRACE_STM_START_BEGIN()        /* nothing */
+#  define TRACE_STM_START_END()          /* nothing */
+#  define TRACE_STM_STERILIZE_BEGIN()    /* nothing */
+#  define TRACE_STM_STERILIZE_END()      /* nothing */
+#  define TRACE_STM_WRITE_BEGIN(addr, valu)        /* nothing */
+#  define TRACE_STM_WRITE_END(addr, valu)          /* nothing */
+#  define TRACE_STM_WRITELOCAL_BEGIN()   /* nothing */
+#  define TRACE_STM_WRITELOCAL_END()     /* nothing */
+#  define TRACE_STM_SUCCESS()            /* nothing */
+#endif /* TL2_TRACE */
+
+
 
 typedef int            BitMap;
 typedef uintptr_t      vwLock;  /* (Version,LOCKBIT) */
@@ -191,6 +273,9 @@ struct _Thread {
     long TxST;
     long TxLD;
 #endif /* TL2_STATS */
+#ifdef TL2_TRACE
+    trace_buffer_t *event_buffer;
+#endif
 };
 
 
@@ -1075,11 +1160,13 @@ Thread*
 TxNewThread ()
 {
     PROF_STM_NEWTHREAD_BEGIN();
+    TRACE_STM_NEWTHREAD_BEGIN();
 
     Thread* t = (Thread*)malloc(sizeof(Thread));
     assert(t);
 
     PROF_STM_NEWTHREAD_END();
+    TRACE_STM_NEWTHREAD_END();
 
     return t;
 }
@@ -1127,6 +1214,10 @@ TxFreeThread (Thread* t)
 #endif
     FreeList(&(t->LocalUndo), TL2_INIT_LOCAL_NUM_ENTRY);
 
+#ifdef TL2_TRACE
+    trace_dump_buffer (t->event_buffer);
+#endif /* TL2_TRACE */
+
     free(t);
 }
 
@@ -1168,6 +1259,10 @@ TxInitThread (Thread* t, long id)
 #ifdef TL2_EAGER
     t->tmpLockEntry.Owner = t;
 #endif /* TL2_EAGER */
+
+#ifdef TL2_TRACE
+    t->event_buffer = trace_new_buffer ();
+#endif /* TL2_TRACE */
 }
 
 
@@ -1208,6 +1303,10 @@ txReset (Thread* Self)
 #ifdef TL2_EAGER
     Self->maxv = 0;
 #endif
+
+#ifdef TL2_TRACE
+    trace_reset_buffer (Self->event_buffer);
+#endif /* TL2_TRACE */
 }
 
 
@@ -1717,6 +1816,7 @@ void
 TxAbort (Thread* Self)
 {
     PROF_STM_ABORT_BEGIN();
+    TRACE_STM_ABORT_BEGIN();
 
 
     Self->Mode = TABORTED;
@@ -1771,6 +1871,7 @@ __rollback:
     tmalloc_clear(Self->freePtr);
 
     PROF_STM_ABORT_END();
+    TRACE_STM_ABORT_END();
     SIGLONGJMP(*Self->envPtr, 1);
     ASSERT(0);
 }
@@ -1785,11 +1886,13 @@ void
 TxStore (Thread* Self, volatile intptr_t* addr, intptr_t valu)
 {
     PROF_STM_WRITE_BEGIN();
+    TRACE_STM_WRITE_BEGIN(addr, valu);
 
     ASSERT(Self->Mode == TTXN);
     if (Self->IsRO) {
         *(Self->ROFlag) = 0;
         PROF_STM_WRITE_END();
+        TRACE_STM_WRITE_END(addr, valu);
         TxAbort(Self);
         ASSERT(0);
     }
@@ -1834,6 +1937,7 @@ TxStore (Thread* Self, volatile intptr_t* addr, intptr_t valu)
             }
             if (--c < 0) {
                 PROF_STM_WRITE_END();
+                TRACE_STM_WRITE_END();
                 TxAbort(Self);
                 ASSERT(0);
             }
@@ -1853,12 +1957,14 @@ TxStore (Thread* Self, volatile intptr_t* addr, intptr_t valu)
     *addr = valu;
 
     PROF_STM_WRITE_END();
+    TRACE_STM_WRITE_END();
 }
 #else /* !TL2_EAGER */
 void
 TxStore (Thread* Self, volatile intptr_t* addr, intptr_t valu)
 {
     PROF_STM_WRITE_BEGIN();
+    TRACE_STM_WRITE_BEGIN(addr, valu);
 
     volatile vwLock* LockFor;
     vwLock rdv;
@@ -1872,6 +1978,7 @@ TxStore (Thread* Self, volatile intptr_t* addr, intptr_t valu)
     if (Self->IsRO) {
         *(Self->ROFlag) = 0;
         PROF_STM_WRITE_END();
+        TRACE_STM_WRITE_END(addr, valu);
         TxAbort(Self);
         return;
     }
@@ -1906,10 +2013,12 @@ TxStore (Thread* Self, volatile intptr_t* addr, intptr_t valu)
                 break;
             } else if ((ctr & 0x1F) == 0 && !ReadSetCoherent(Self)) {
                 PROF_STM_WRITE_END();
+                TRACE_STM_WRITE_END(addr, valu);
                 TxAbort(Self);
                 return;
             } else if (--ctr < 0) {
                 PROF_STM_WRITE_END();
+                TRACE_STM_WRITE_END(addr, valu);
                 TxAbort(Self);
                 return;
             }
@@ -1941,6 +2050,7 @@ TxStore (Thread* Self, volatile intptr_t* addr, intptr_t valu)
                 ASSERT(LockFor == e->LockFor);
                 e->Valu = valu; /* CCM: update associated value in write-set */
                 PROF_STM_WRITE_END();
+                TRACE_STM_WRITE_END(addr, valu);
                 return;
             }
         }
@@ -1948,9 +2058,11 @@ TxStore (Thread* Self, volatile intptr_t* addr, intptr_t valu)
         if ((rdv & LOCKBIT) == 0 && rdv <= Self->rv && LDLOCK(LockFor) == rdv) {
             if (!TrackLoad(Self, LockFor)) {
                 PROF_STM_WRITE_END();
+                TRACE_STM_WRITE_END(addr, valu);
                 TxAbort(Self);
             }
             PROF_STM_WRITE_END();
+            TRACE_STM_WRITE_END(addr, valu);
             return;
         }
     }
@@ -1976,6 +2088,7 @@ TxStore (Thread* Self, volatile intptr_t* addr, intptr_t valu)
 #  endif /* TL2_OPTIM_HASHLOG && TL2_RESIZE_HASHLOG */
 
     PROF_STM_WRITE_END();
+    TRACE_STM_WRITE_END(addr, valu);
 }
 #endif /* !TL2_EAGER */
 
@@ -1989,6 +2102,7 @@ intptr_t
 TxLoad (Thread* Self, volatile intptr_t* Addr)
 {
     PROF_STM_READ_BEGIN();
+    TRACE_STM_READ_BEGIN(Addr);
 
     intptr_t Valu;
 
@@ -2011,10 +2125,12 @@ TxLoad (Thread* Self, volatile intptr_t* Addr)
         if (!Self->IsRO) {
             if (!TrackLoad(Self, LockFor)) {
                 PROF_STM_READ_END();
+                TRACE_STM_READ_END(Addr);
                 TxAbort(Self);
             }
         }
         PROF_STM_READ_END();
+        TRACE_STM_READ_END(Addr);
         return Valu;
     }
 
@@ -2029,6 +2145,7 @@ TxLoad (Thread* Self, volatile intptr_t* Addr)
 
     Self->abv = rdv;
     PROF_STM_READ_END();
+    TRACE_STM_READ_END(Addr);
     TxAbort(Self);
     ASSERT(0);
 
@@ -2039,6 +2156,7 @@ intptr_t
 TxLoad (Thread* Self, volatile intptr_t* Addr)
 {
     PROF_STM_READ_BEGIN();
+    TRACE_STM_READ_BEGIN(Addr);
 
     intptr_t Valu;
 
@@ -2069,6 +2187,7 @@ TxLoad (Thread* Self, volatile intptr_t* Addr)
             ASSERT(e->Addr != NULL);
             if (e->Addr == Addr) {
                 PROF_STM_READ_END();
+                TRACE_STM_READ_END(Addr);
                 return e->Valu;
             }
         }
@@ -2096,10 +2215,12 @@ TxLoad (Thread* Self, volatile intptr_t* Addr)
         if (!Self->IsRO) {
             if (!TrackLoad(Self, LockFor)) {
                 PROF_STM_READ_END();
+                TRACE_STM_READ_END(Addr);
                 TxAbort(Self);
             }
         }
         PROF_STM_READ_END();
+        TRACE_STM_READ_END(Addr);
         return Valu;
     }
 
@@ -2114,6 +2235,7 @@ TxLoad (Thread* Self, volatile intptr_t* Addr)
 
     Self->abv = rdv;
     PROF_STM_READ_END();
+    TRACE_STM_READ_END(Addr);
     TxAbort(Self);
     ASSERT(0);
 
@@ -2134,6 +2256,7 @@ static void
 txSterilize (void* Base, size_t Length)
 {
     PROF_STM_STERILIZE_BEGIN();
+    TRACE_STM_STERILIZE_BEGIN();
 
     intptr_t* Addr = (intptr_t*)Base;
     intptr_t* End = Addr + Length;
@@ -2148,6 +2271,7 @@ txSterilize (void* Base, size_t Length)
     memset(Base, (unsigned char)TL2_USE_AFTER_FREE_MARKER, Length);
 
     PROF_STM_STERILIZE_END();
+    TRACE_STM_STERILIZE_END();
 }
 
 
@@ -2161,11 +2285,13 @@ void
 TxStoreLocal (Thread* Self, volatile intptr_t* Addr, intptr_t Valu)
 {
     PROF_STM_WRITELOCAL_BEGIN();
+    TRACE_STM_WRITELOCAL_BEGIN();
 
     SaveForRollBack(&Self->LocalUndo, Addr, *Addr);
     *Addr = Valu;
 
     PROF_STM_WRITELOCAL_END();
+    TRACE_STM_WRITELOCAL_END();
 }
 
 
@@ -2177,6 +2303,7 @@ void
 TxStart (Thread* Self, sigjmp_buf* envPtr, int* ROFlag)
 {
     PROF_STM_START_BEGIN();
+    TRACE_STM_START_BEGIN();
 
     ASSERT(Self->Mode == TIDLE || Self->Mode == TABORTED);
     txReset(Self);
@@ -2198,6 +2325,7 @@ TxStart (Thread* Self, sigjmp_buf* envPtr, int* ROFlag)
 
 
     PROF_STM_START_END();
+    TRACE_STM_START_END();
 }
 
 
@@ -2209,6 +2337,7 @@ int
 TxCommit (Thread* Self)
 {
     PROF_STM_COMMIT_BEGIN();
+    TRACE_STM_COMMIT_BEGIN();
 
     ASSERT(Self->Mode == TTXN);
 
@@ -2233,7 +2362,9 @@ TxCommit (Thread* Self)
         }
 #  endif
         PROF_STM_COMMIT_END();
+        TRACE_STM_COMMIT_END_OK();
         PROF_STM_SUCCESS();
+        TRACE_STM_SUCCESS();
         return 1;
     }
 
@@ -2253,11 +2384,14 @@ TxCommit (Thread* Self)
         }
 #endif
         PROF_STM_COMMIT_END();
+        TRACE_STM_COMMIT_END_OK();
         PROF_STM_SUCCESS();
+        TRACE_STM_SUCCESS();
         return 1;
     }
 
     PROF_STM_COMMIT_END();
+    TRACE_STM_COMMIT_END_FAIL();
     TxAbort(Self);
     ASSERT(0);
 

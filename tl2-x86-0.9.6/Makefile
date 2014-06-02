@@ -10,7 +10,7 @@
 # ==============================================================================
 
 CC      := gcc
-CFLAGS  := -g -Wall -Winline -O3
+CFLAGS  := -g -Wall -Winline -O3 $(TRACE_CFLAGS)
 #CFLAGS  += -m32
 #CFLAGS  += -DTL2_OPTIM_HASHLOG
 #CFLAGS  += -DTL2_RESIZE_HASHLOG
