@@ -17,6 +17,8 @@ typedef struct {
 } trace_buffer_t;
 
 
+#define always_inline inline __attribute__((__always_inline__))
+
 ///////////////////
 // PRIVATE methods
 	
@@ -24,7 +26,7 @@ typedef struct {
 	
 //////////////////
 // PUBLIC methods
-inline void trace_reset_buffer (trace_buffer_t *buf) {
+always_inline void trace_reset_buffer (trace_buffer_t *buf) {
 	printf ("IN: %s : %s\n", __FILE__, __FUNCTION__);
 	assert (buf != NULL);
 	assert (buf->data != NULL);
@@ -33,19 +35,19 @@ inline void trace_reset_buffer (trace_buffer_t *buf) {
 	printf ("OUT: %s : %s\n", __FILE__, __FUNCTION__);
 }
 
-inline trace_buffer_t *trace_new_buffer (void) {
-	// printf ("IN %s : %s\n", __FILE__, __FUNCTION__);
+always_inline trace_buffer_t *trace_new_buffer (void) {
+	printf ("IN %s : %s\n", __FILE__, __FUNCTION__);
 	trace_buffer_t *buf = malloc (sizeof (trace_buffer_t));
 	assert (buf != NULL);
 	buf->data = malloc (BUFFER_SIZE);
 	trace_reset_buffer (buf);
-	// printf ("OUT %s : %s\n", __FILE__, __FUNCTION__);
+	printf ("OUT %s : %s\n", __FILE__, __FUNCTION__);
 	return buf;
 }
 
 void trace_dump_buffer (const trace_buffer_t *buf);
 
-inline void trace_event (trace_buffer_t *buf, const void *data, unsigned int nbytes) {
+always_inline void trace_event (trace_buffer_t *buf, const void *data, unsigned int nbytes) {
 	printf ("IN: %s : %s\n", __FILE__, __FUNCTION__);
 	tsc_t t = rdtsc ();
 	unsigned long *b = buf->data;
