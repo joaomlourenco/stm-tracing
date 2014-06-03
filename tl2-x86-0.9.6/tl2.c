@@ -41,6 +41,7 @@
 #include "tmtracing.h"
 #endif /* TL2_TRACE */
 
+
 #if defined(TL2_RESIZE_HASHLOG) && !defined(TL2_OPTIM_HASHLOG)
 #  error TL2_OPTIM_HASHLOG must be defined for TL2_RESIZE_HASHLOG
 #endif

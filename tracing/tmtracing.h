@@ -7,7 +7,7 @@
 #include "rdtsc.h"
 
 // each BUFFER_SIZE = 128 MBytes
-#define BUFFER_SIZE	(1<<27)
+#define BUFFER_SIZE	(1<<20)
 #define BUF_MASK	(BUFFER_SIZE-1)
 
 
@@ -25,20 +25,21 @@ typedef struct {
 //////////////////
 // PUBLIC methods
 inline void trace_reset_buffer (trace_buffer_t *buf) {
-	// printf ("%s : %s\n", __FILE__, __FUNCTION__);
+	printf ("IN: %s : %s\n", __FILE__, __FUNCTION__);
 	assert (buf != NULL);
 	assert (buf->data != NULL);
-	memset (buf->data, 0, BUFFER_SIZE);
+	memset (buf->data, 0, BUFFER_SIZE*sizeof(unsigned long));
 	buf->pos = 0;
+	printf ("OUT: %s : %s\n", __FILE__, __FUNCTION__);
 }
 
 inline trace_buffer_t *trace_new_buffer (void) {
-	printf ("IN %s : %s\n", __FILE__, __FUNCTION__);
+	// printf ("IN %s : %s\n", __FILE__, __FUNCTION__);
 	trace_buffer_t *buf = malloc (sizeof (trace_buffer_t));
 	assert (buf != NULL);
 	buf->data = malloc (BUFFER_SIZE);
 	trace_reset_buffer (buf);
-	printf ("OUT %s : %s\n", __FILE__, __FUNCTION__);
+	// printf ("OUT %s : %s\n", __FILE__, __FUNCTION__);
 	return buf;
 }
 
