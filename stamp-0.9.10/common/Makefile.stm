@@ -12,7 +12,7 @@
 CFLAGS   += -DSTM -I$(STM)
 CPPFLAGS := $(CFLAGS)
 LDFLAGS  += -L$(STM)
-LIBS     += -ltl2
+LIBS     += -ltl2 $(TRACE_LIB)
 
 
 # ==============================================================================
