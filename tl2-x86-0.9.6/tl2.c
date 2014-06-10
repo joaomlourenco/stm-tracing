@@ -143,8 +143,9 @@ typedef enum {
 #  define TRACE_STM_WRITELOCAL_BEGIN_CODE	18
 #  define TRACE_STM_WRITELOCAL_END_CODE		19
 #  define TRACE_STM_SUCCESS_CODE		20
+#endif
 
-#ifdef NOTDEFINED
+#ifdef TL2_TRACE
 #define TRACE_EVENT(c,a,b)	do { \
 					unsigned long data[3]; \
 					data[0] = c;	/* Code */ \
@@ -152,30 +153,31 @@ typedef enum {
 					data[2] = b;	/* value or zero */ \
 					trace_event (Self->event_buffer, data, sizeof(data)); \
 				 } while (0)
-else
+#else
 #define TRACE_EVENT(c,a,b)	/* nothing */
 #endif
 
-#  define TRACE_STM_ABORT_BEGIN()        	/* TRACE_EVENT (TRACE_STM_ABORT_BEGIN_CODE, 0, 0) */
-#  define TRACE_STM_ABORT_END()          	/* TRACE_EVENT (TRACE_STM_ABORT_END_CODE, 0, 0) */
-#  define TRACE_STM_COMMIT_BEGIN()       	/* TRACE_EVENT (TRACE_STM_COMMIT_BEGIN_CODE, 0, 0) */
-#  define TRACE_STM_COMMIT_END_OK()      	/* TRACE_EVENT (TRACE_STM_COMMIT_END_OK_CODE, 0, 0) */
-#  define TRACE_STM_COMMIT_END_FAIL()    	/* TRACE_EVENT (TRACE_STM_COMMIT_END_FAIL_CODE, 0, 0) */
+#ifdef TL2_TRACE
+#  define TRACE_STM_ABORT_BEGIN()        	TRACE_EVENT (TRACE_STM_ABORT_BEGIN_CODE, 0, 0)
+#  define TRACE_STM_ABORT_END()          	TRACE_EVENT (TRACE_STM_ABORT_END_CODE, 0, 0)
+#  define TRACE_STM_COMMIT_BEGIN()       	TRACE_EVENT (TRACE_STM_COMMIT_BEGIN_CODE, 0, 0)
+#  define TRACE_STM_COMMIT_END_OK()      	TRACE_EVENT (TRACE_STM_COMMIT_END_OK_CODE, 0, 0)
+#  define TRACE_STM_COMMIT_END_FAIL()    	TRACE_EVENT (TRACE_STM_COMMIT_END_FAIL_CODE, 0, 0)
 #  define TRACE_STM_NEWTHREAD_BEGIN()		/* nothing */
 #  define TRACE_STM_NEWTHREAD_END()		/* nothing */
-#  define TRACE_STM_READ_BEGIN(addr)         	/* TRACE_EVENT (TRACE_STM_READ_BEGIN_CODE, (unsigned long)addr, 0) */
-#  define TRACE_STM_READ_END(addr)           	/* TRACE_EVENT (TRACE_STM_READ_END_CODE, (unsigned long)addr, 0) */
-#  define TRACE_STM_READLOCAL_BEGIN()    	/* TRACE_EVENT (TRACE_STM_READLOCAL_BEGIN_CODE, 0, 0) */
-#  define TRACE_STM_READLOCAL_END()      	/* TRACE_EVENT (TRACE_STM_READLOCAL_END_CODE, 0, 0) */
-#  define TRACE_STM_START_BEGIN()        	/* TRACE_EVENT (TRACE_STM_START_BEGIN_CODE, 0, 0) */
-#  define TRACE_STM_START_END()          	/* TRACE_EVENT (TRACE_STM_START_END_CODE, 0, 0) */
+#  define TRACE_STM_READ_BEGIN(addr)         	TRACE_EVENT (TRACE_STM_READ_BEGIN_CODE, (unsigned long)addr, 0)
+#  define TRACE_STM_READ_END(addr)           	TRACE_EVENT (TRACE_STM_READ_END_CODE, (unsigned long)addr, 0)
+#  define TRACE_STM_READLOCAL_BEGIN()    	TRACE_EVENT (TRACE_STM_READLOCAL_BEGIN_CODE, 0, 0)
+#  define TRACE_STM_READLOCAL_END()      	TRACE_EVENT (TRACE_STM_READLOCAL_END_CODE, 0, 0)
+#  define TRACE_STM_START_BEGIN()        	TRACE_EVENT (TRACE_STM_START_BEGIN_CODE, 0, 0)
+#  define TRACE_STM_START_END()          	TRACE_EVENT (TRACE_STM_START_END_CODE, 0, 0)
 #  define TRACE_STM_STERILIZE_BEGIN()    	/* nothing */
 #  define TRACE_STM_STERILIZE_END()      	/* nothing */
-#  define TRACE_STM_WRITE_BEGIN(addr, val)     	/* TRACE_EVENT (TRACE_STM_WRITE_BEGIN_CODE, (unsigned long)addr, (unsigned long)val) */
-#  define TRACE_STM_WRITE_END(addr, val)       	/* TRACE_EVENT (TRACE_STM_WRITE_END_CODE, (unsigned long)addr, (unsigned long)val) */
-#  define TRACE_STM_WRITELOCAL_BEGIN()   	/* TRACE_EVENT (TRACE_STM_WRITELOCAL_BEGIN_CODE, 0, 0) */
-#  define TRACE_STM_WRITELOCAL_END()     	/* TRACE_EVENT (TRACE_STM_WRITELOCAL_END_CODE, 0, 0) */
-#  define TRACE_STM_SUCCESS()            	/* TRACE_EVENT (TRACE_STM_SUCCESS_CODE, 0, 0) */
+#  define TRACE_STM_WRITE_BEGIN(addr, val)     	TRACE_EVENT (TRACE_STM_WRITE_BEGIN_CODE, (unsigned long)addr, (unsigned long)val)
+#  define TRACE_STM_WRITE_END(addr, val)       	TRACE_EVENT (TRACE_STM_WRITE_END_CODE, (unsigned long)addr, (unsigned long)val)
+#  define TRACE_STM_WRITELOCAL_BEGIN()   	TRACE_EVENT (TRACE_STM_WRITELOCAL_BEGIN_CODE, 0, 0)
+#  define TRACE_STM_WRITELOCAL_END()     	TRACE_EVENT (TRACE_STM_WRITELOCAL_END_CODE, 0, 0)
+#  define TRACE_STM_SUCCESS()            	TRACE_EVENT (TRACE_STM_SUCCESS_CODE, 0, 0)
 #else /* !TL2_TRACE */
 #  define TRACE_STM_ABORT_BEGIN()        /* nothing */
 #  define TRACE_STM_ABORT_END()          /* nothing */

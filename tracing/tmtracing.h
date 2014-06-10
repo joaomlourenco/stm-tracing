@@ -36,13 +36,13 @@ always_inline void trace_reset_buffer (trace_buffer_t *buf) {
 }
 
 always_inline trace_buffer_t *trace_new_buffer (void) {
-	printf ("IN %s : %s\n", __FILE__, __FUNCTION__);
+	printf ("IN: %s : %s\n", __FILE__, __FUNCTION__);
 	trace_buffer_t *buf = malloc (sizeof (trace_buffer_t));
 	assert (buf != NULL);
 	buf->data = malloc (BUFFER_SIZE * sizeof(unsigned long));
 	assert (buf->data != NULL);
 	trace_reset_buffer (buf);
-	printf ("OUT %s : %s\n", __FILE__, __FUNCTION__);
+	printf ("OUT: %s : %s\n", __FILE__, __FUNCTION__);
 	return buf;
 }
 
